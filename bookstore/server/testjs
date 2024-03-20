@@ -1,0 +1,60 @@
+const chai = require('chai');
+const expect = chai.expect;
+const request = require('supertest');
+const app = require('./index'); // Assuming your main file is named 'index.js'
+
+describe('Bookstore API Tests', () => {
+  it('should return all books', async () => {
+    const res = await request(app).get('/books');
+    expect(res.statusCode).to.equal(200);
+    expect(res.body).to.be.an('array');
+  });
+
+  it('should return a single book by ID', async () => {
+    const res = await request(app).get('/books/1');
+    expect(res.statusCode).to.equal(200);
+    expect(res.body).to.be.an('object');
+    expect(res.body.id).to.equal(1);
+  });
+
+  it('should add a new book', async () => {
+    const newBook = {
+      title: 'New Book',
+      description: 'Description of New Book',
+      author: 'Author 3',
+      publicationDate: '2022-03-01',
+      genre: 'Action',
+      price: 29.99
+    };
+    const res = await request(app)
+      .post('/books')
+      .send(newBook);
+    expect(res.statusCode).to.equal(201);
+    expect(res.body).to.be.an('object');
+    expect(res.body).to.have.property('id');
+  });
+
+  it('should update an existing book', async () => {
+    const updatedBook = {
+      title: 'Updated Book',
+      description: 'Updated Description',
+      author: 'Updated Author',
+      publicationDate: '2022-04-01',
+      genre: 'Romance',
+      price: 39.99
+    };
+    const res = await request(app)
+      .put('/books/1')
+      .send(updatedBook);
+    expect(res.statusCode).to.equal(200);
+    expect(res.body).to.be.an('object');
+    expect(res.body.title).to.equal('Updated Book');
+  });
+
+  it('should delete a book by ID', async () => {
+    const res = await request(app).delete('/books/1');
+    expect(res.statusCode).to.equal(200);
+    expect(res.body).to.be.an('object');
+    expect(res.body.message).to.equal('Book deleted');
+  });
+});
