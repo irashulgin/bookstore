@@ -21,4 +21,4 @@ Books Catalog is a web application for managing a catalog of books. Users can vi
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/irashulgin/books-catalog.git
+   git clone https://github.com/irashulgin/bookstore.git
